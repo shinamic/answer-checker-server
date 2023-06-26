@@ -1,53 +1,60 @@
 const pool = require('../connection/pool');
 const gpt = require('../apis/gpt');
 
-async function getAnswerFromDatabase(questionid) {
-    return new Promise((resolve, reject) => {
-      // Acquire a connection from the pool
-      pool.getConnection((error, connection) => {
+async function getAnswersFromDatabase(ids) {
+  return new Promise((resolve, reject) => {
+    // Acquire a connection from the pool
+    pool.getConnection((error, connection) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      // Prepare the list of IDs as a comma-separated string
+      const idList = ids.join(',');
+
+      // Perform the database query to retrieve answers and questions for the given IDs
+      const query = `SELECT id, question, answer FROM questions WHERE id IN (${idList})`;
+      connection.query(query, (error, results) => {
+        // Release the connection back to the pool
+        connection.release();
+
         if (error) {
           reject(error);
           return;
         }
-  
-        // Perform the database query
-        const query = 'SELECT question, answer FROM questions WHERE id = ?';
-        connection.query(query, [questionid], (error, results) => {
-          // Release the connection back to the pool
-          connection.release();
-  
-          if (error) {
-            reject(error);
-            return;
-          }
-  
-          if (results.length > 0) {
-            resolve(results[0]);
-          } else {
-            reject(new Error('Answer not found in the database'));
-          }
-        });
+
+        resolve(results);
       });
     });
-  }
+  });
+}
 
 module.exports = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
     const { submissions } = req.body;
+    console.log('this is the submissions', submissions)
     try {
         // Process each 
         const resultsArr = [];
-        
-        // Work on this using SQL UNION.
+        console.log("step 1")
+        console.log("this is the resultArr !!!!!!!!!", resultsArr)
+        // Work on this using SQL UNION. omo boss we dont need union 
         for (const submission of submissions) {
-          const { answer: response, id } = submission;
-          const {question, answer} = await getAnswerFromDatabase(id);
+          const { response, id } = submission;
+          console.log('consolelogging the answer and id', response, id)
           resultsArr.push({
-            question,
             response,
-            answer,
             id
           });
+        }
+        const ids = resultsArr.map(result => result.id);
+        const answersAndQuestions = await getAnswersFromDatabase(ids);
+
+        for (let i = 0; i < resultsArr.length; i++) {
+          const result = answersAndQuestions.find(item => item.id === resultsArr[i].id);
+          resultsArr[i].answer = result ? result.answer : '';
+          resultsArr[i].question = result ? result.question : '';
         }
         const verification = await gpt(resultsArr.reduce((acc, cur) => `${acc}\n
           id: ${cur.id}
@@ -55,7 +62,6 @@ module.exports = async (req, res) => {
           Response: ${cur.response}
           Answer: ${cur.answer}
         `, ''));
-        console.log(verification.trim());
         res.status(200).send({
             message: JSON.parse(JSON.stringify(verification.trim())),
         });
