@@ -29,7 +29,7 @@ Response: The current president of Nigeria is Muhammadu Buhari.
 Answer: Asewaju Bola Ahmed Tinubu
 
 The above query would return the following:
-[{id: 1, comment: "correct"}, {id: 2, comment: "incorrect"}]`;
+[{"id": 1, "comment": "correct"}, {"id": 2, "comment": "incorrect"}]`;
 
 const gpt = async (chat) => {
 

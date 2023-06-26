@@ -35,14 +35,9 @@ module.exports = async (req, res) => {
     const { submissions } = req.body;
     console.log('this is the submissions', submissions)
     try {
-        // Process each 
         const resultsArr = [];
-        console.log("step 1")
-        console.log("this is the resultArr !!!!!!!!!", resultsArr)
-        // Work on this using SQL UNION. omo boss we dont need union 
         for (const submission of submissions) {
-          const { response, id } = submission;
-          console.log('consolelogging the answer and id', response, id)
+          const { answer: response, id } = submission;
           resultsArr.push({
             response,
             id
@@ -62,8 +57,9 @@ module.exports = async (req, res) => {
           Response: ${cur.response}
           Answer: ${cur.answer}
         `, ''));
-        res.status(200).send({
-            message: JSON.parse(JSON.stringify(verification.trim())),
+        console.log(verification);
+        res.status(200).json({
+            message: JSON.parse(verification),
         });
     } catch (error) {
       console.error('Error saving submission:', error);
