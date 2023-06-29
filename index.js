@@ -3,8 +3,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { check, saveSubmission, populateQuestions, getQuestion } = require('./routes');
-const { populate } = require('dotenv');
+const { saveSubmission, populateQuestions, getQuestion } = require('./routes');
 
 app.use(cors());
 app.use(bodyParser.json());

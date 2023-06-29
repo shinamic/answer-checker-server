@@ -31,9 +31,7 @@ async function getAnswersFromDatabase(ids) {
 }
 
 module.exports = async (req, res) => {
-  // console.log(req.body);
     const { submissions } = req.body;
-    console.log('this is the submissions', submissions)
     try {
         const resultsArr = [];
         for (const submission of submissions) {
@@ -51,13 +49,16 @@ module.exports = async (req, res) => {
           resultsArr[i].answer = result ? result.answer : '';
           resultsArr[i].question = result ? result.question : '';
         }
-        const verification = await gpt(resultsArr.reduce((acc, cur) => `${acc}\n
+        const verification = await gpt(resultsArr.reduce((acc, cur) => {
+          return `${acc}\n
           id: ${cur.id}
           Question: ${cur.question}
           Response: ${cur.response}
-          Answer: ${cur.answer}
-        `, ''));
-        console.log(verification);
+          Expert Answer: ${cur.answer}
+        `
+        }, ''));
+
+        console.log(`Verification: ${verification}`);
         res.status(200).json({
             message: JSON.parse(verification),
         });
