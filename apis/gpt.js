@@ -12,7 +12,7 @@ If the response is correct, you will say "correct".
 If the response is incorrect, you will say "incorrect
 If the response is partially correct, it should be considered correct.
 Your response must be in an array of objects with the following format:
-[{id: 1, comment: "correct"}, {id: 2, comment: "incorrect"}]
+[{id: 1, "Response": "The capital of France is Nigeria.", comment: "correct"}, {id: 2, Response": "The current president of Nigeria is Muhammadu Buhari.", comment: "incorrect"}]
 You are to cross-check the relevance of the response to the question.
 
 You must NOT return any comments that are not "correct" or "incorrect".
@@ -30,7 +30,7 @@ Response: The current president of Nigeria is Muhammadu Buhari.
 Expert Answer: Asewaju Bola Ahmed Tinubu
 
 The above query would return the following:
-[{"id": 1, "comment": "correct"}, {"id": 2, "comment": "incorrect"}]
+[{"id": 1, "Response": "The capital of France is Nigeria.", "comment": "correct"}, {"id": 2, "Response": "The current president of Nigeria is Muhammadu Buhari.", "comment": "incorrect"}]
 
 Whatever is in the "Expert Answer" field is the correct answer and MUST be treated as the correct answer.
 Whatever is in the "Expert Answer" field superceeds whatever is on the internet.

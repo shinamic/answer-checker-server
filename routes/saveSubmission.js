@@ -62,10 +62,38 @@ module.exports = async (req, res) => {
         `
         }, ''));
 
+
         console.log(`Verification: ${verification}`);
-        res.status(200).json({
-            message: JSON.parse(verification),
-        });
+        // Insert the verification results into the submissions table
+    // pool.getConnection((error, connection) => {
+    //   if (error) {
+    //     console.error('Error connecting to the database:', error);
+    //     res.status(500).send({
+    //       error: 'An error occurred'
+    //     });
+    //     return;
+    //   }
+
+    //   const insertQuery = 'INSERT INTO submissions (questionid, response, comment) VALUES (?, ?, ?)';
+    //   const values = JSON.parse(verification).map(result => [result.id, result.Response, result.comment]);
+
+    //   connection.query(insertQuery, values, (error, _) => {
+    //     connection.release();
+    //     if (error) {
+    //       console.error('Error inserting into the submissions table:', error);
+    //       res.status(500).send({
+    //         error: 'An error occurred'
+    //       });
+    //     } else {
+    //       res.status(200).json({
+    //         message: JSON.parse(verification),
+    //       });
+    //     }
+    //   });
+    // });
+    res.status(200).json({
+              message: JSON.parse(verification),
+            });
     } catch (error) {
       console.error('Error saving submission:', error);
       res.status(500).send({
