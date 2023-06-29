@@ -50,6 +50,10 @@ module.exports = async (req, res) => {
           resultsArr[i].question = result ? result.question : '';
         }
         const verification = await gpt(resultsArr.reduce((acc, cur) => {
+          console.log(`id: ${cur.id}
+          question: ${cur.question}
+          response: ${cur.response}
+          answer: ${cur.answer}`);
           return `${acc}\n
           id: ${cur.id}
           Question: ${cur.question}
