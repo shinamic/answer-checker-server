@@ -2,15 +2,15 @@
 const predefinedQuestions = [
     {
         question: 'What is the capital of France?',
-        answer: 'Paris'
+        answer: 'Paris is the capital of france'
     },
     {
         question: 'Who wrote the novel "Pride and Prejudice"?',
-        answer: 'Jane Austen'
+        answer: 'Jane Austen wrote the novel '
     },
     {
         question: 'What is the largest planet in our solar system?',
-        answer: 'Jupiter'
+        answer: 'Jupiter is the largest planet in our solar system'
     },
     {
         question: 'Who painted the Mona Lisa?',
